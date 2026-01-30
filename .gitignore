@@ -1,0 +1,9 @@
+venv/
+__pycache__/
+*.pyc
+data/
+results/checkpoint.pth
+.streamlit/
+results/vit-cifar10/
+*.safetensors
+*.bin
