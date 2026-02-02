@@ -1,5 +1,3 @@
-print("TRAIN.PY LOADED 🧠")
-
 # -----------------------
 # Imports
 # -----------------------
@@ -13,6 +11,7 @@ from transformers import ViTForImageClassification
 # Main function (IMPORTANT)
 # -----------------------
 def main():
+    print("TRAIN.PY LOADED 🧠")
     print("TRAIN.PY STARTED 🚀🔥")
 
     # -----------------------
