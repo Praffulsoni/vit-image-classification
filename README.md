@@ -1,3 +1,5 @@
+---
+
 # 🧠 Vision Transformer (ViT) Image Classification on CIFAR-10
 
 This project demonstrates an end-to-end deep learning pipeline using a **Vision Transformer (ViT)** model for image classification.
@@ -8,6 +10,7 @@ The model is trained on the **CIFAR-10 dataset** and deployed for inference usin
 
 Instead of retraining every time, the trained model is saved and reused for fast predictions on new images.
 
+---
 
 ## 📌 Features
 
@@ -19,6 +22,7 @@ Instead of retraining every time, the trained model is saved and reused for fast
 * 🌐 Streamlit web app for easy usage
 * ⚡ GPU acceleration (CUDA supported)
 
+---
 
 ## 🗂️ Project Structure
 
@@ -37,6 +41,8 @@ vit-image-classification/
 └── venv/             # Virtual environment (optional)
 ```
 
+---
+
 ## 🧠 Model Used
 
 * **Vision Transformer (ViT)**
@@ -45,26 +51,36 @@ vit-image-classification/
 
 Classes:
 
+```
 airplane, automobile, bird, cat, deer, dog, frog, horse, ship, truck
+```
 
+---
 
 ## ⚙️ Installation
 
 ### 1️⃣ Create virtual environment (optional but recommended)
 
+```bash
 python -m venv venv
 venv\Scripts\activate
+```
 
 ### 2️⃣ Install dependencies
 
+```bash
 pip install -r requirements.txt
+```
 
+---
 
 ## 🏋️ Training the Model
 
 Run:
 
+```bash
 python train.py
+```
 
 This will:
 
@@ -72,35 +88,49 @@ This will:
 * Train the ViT model
 * Save the trained model to:
 
+```
 results/vit-cifar10/
+```
 
+---
 
 ## 🔮 Predicting on Images (CLI)
 
 ### Single image:
 
+```bash
 python predict.py predict_image/puppy.jpg
+```
 
 ### Batch prediction (folder):
 
+```bash
 python predict.py predict_image/
+```
 
 Output example:
 
+```
 Image: puppy.jpg
 Predicted class: dog
 Confidence: 98.84%
+```
 
+---
 
 ## 🌐 Web App (Streamlit)
 
 Run:
 
+```bash
 streamlit run app.py
+```
 
 Then open in browser:
 
+```
 http://localhost:8501
+```
 
 Features:
 
@@ -111,6 +141,7 @@ Features:
   * Confidence score
   * Uploaded image preview
 
+---
 
 ## 📊 Confidence Score
 
@@ -118,11 +149,14 @@ The confidence score represents how sure the model is about its prediction using
 
 Example:
 
+```
 Predicted class: dog  
 Confidence: 98.84%
+```
 
 This means the model is 98.84% confident in its prediction.
 
+---
 
 ## 🧪 Why This Project?
 
@@ -137,6 +171,7 @@ This project demonstrates:
 It simulates a real-world ML workflow:
 **Train → Save → Load → Predict → Deploy**
 
+---
 
 ## 🚀 Future Improvements
 
@@ -146,6 +181,7 @@ It simulates a real-world ML workflow:
 * Online deployment
 * Mobile-friendly UI
 
+---
 
 ## 📜 Requirements
 
@@ -160,13 +196,15 @@ Main libraries:
 * pillow
 * numpy
 
+---
 
 ## 👨‍💻 Author
 
-**Prafful Rajesh Soni**
+**Prafful**
 B.Tech IT Student
 Passionate about AI, ML, and Deep Learning 🚀
 
+---
 
 ## ⭐ Acknowledgements
 
@@ -174,3 +212,5 @@ Passionate about AI, ML, and Deep Learning 🚀
 * PyTorch
 * CIFAR-10 Dataset
 * Streamlit
+
+---
