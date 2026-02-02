@@ -1,5 +1,3 @@
----
-
 # 🧠 Vision Transformer (ViT) Image Classification on CIFAR-10
 
 This project demonstrates an end-to-end deep learning pipeline using a **Vision Transformer (ViT)** model for image classification.
