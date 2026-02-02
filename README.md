@@ -22,6 +22,7 @@ Instead of retraining every time, the trained model is saved and reused for fast
 
 ## 🗂️ Project Structure
 
+```
 vit-image-classification/
 │
 ├── train.py          # Trains the ViT model and saves it
@@ -34,7 +35,7 @@ vit-image-classification/
 ├── predict_image/    # Images for prediction
 ├── data/             # CIFAR-10 dataset (auto-downloaded)
 └── venv/             # Virtual environment (optional)
-
+```
 
 ## 🧠 Model Used
 
