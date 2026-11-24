@@ -1,10 +1,11 @@
 # 🧠 Vision Transformer (ViT) Image Classification on CIFAR-10
 
 ![Python](https://img.shields.io/badge/Python-3.13-3776AB?logo=python&logoColor=white)
-![PyTorch](https://img.shields.io/badge/PyTorch-2.10-EE4C2C?logo=pytorch&logoColor=white)
+![PyTorch](https://img.shields.io/badge/PyTorch-2.x-EE4C2C?logo=pytorch&logoColor=white)
 ![Transformers](https://img.shields.io/badge/🤗%20Transformers-5.0-FFD21E)
 ![Streamlit](https://img.shields.io/badge/Streamlit-1.53-FF4B4B?logo=streamlit&logoColor=white)
-![CUDA](https://img.shields.io/badge/CUDA-supported-76B900?logo=nvidia&logoColor=white)
+![CUDA](https://img.shields.io/badge/CUDA-optional-76B900?logo=nvidia&logoColor=white)
+![Test Accuracy](https://img.shields.io/badge/Test%20Accuracy-98.45%25-brightgreen)
 
 This project fine-tunes a pretrained **Vision Transformer (`google/vit-base-patch16-224`)** on the **CIFAR-10** dataset and serves it in two ways:
 
@@ -25,6 +26,7 @@ You train once, the fine-tuned weights are saved to disk, and every later predic
 - [Training](#️-training)
 - [Prediction (CLI)](#-prediction-cli)
 - [Web App (Streamlit)](#-web-app-streamlit)
+- [Results](#-results)
 - [Training Configuration](#️-training-configuration)
 - [Troubleshooting](#-troubleshooting)
 - [Future Improvements](#-future-improvements)
@@ -254,6 +256,24 @@ The model outputs 10 raw scores (logits). Softmax turns them into probabilities 
 $$P(\text{class}_i) = \frac{e^{z_i}}{\sum_{j=1}^{10} e^{z_j}}$$
 
 `Confidence: 98.84%` means the model gave 98.84% of the probability to that class. High confidence is not proof of correctness, especially for images outside CIFAR-10's categories.
+
+---
+
+## 📈 Results
+
+The saved model (`results/vit-cifar10`, fine-tuned for 1 epoch) was evaluated on all **10,000 CIFAR-10 test images** using the same transform as training:
+
+**Test accuracy: 98.45%**
+
+| Class | Accuracy | Class | Accuracy |
+| :--- | :---: | :--- | :---: |
+| ✈️ airplane | 98.70% | 🐶 dog | 97.20% |
+| 🚗 automobile | 98.50% | 🐸 frog | 99.80% |
+| 🐦 bird | 98.80% | 🐴 horse | 99.40% |
+| 🐱 cat | 96.60% | 🚢 ship | 99.10% |
+| 🦌 deer | 97.20% | 🚚 truck | 99.20% |
+
+Cat (96.6%), deer and dog (97.2%) are the hardest classes. Frog is the easiest (99.8%).
 
 ---
 
