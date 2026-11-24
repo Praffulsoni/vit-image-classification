@@ -4,10 +4,12 @@
 ![PyTorch](https://img.shields.io/badge/PyTorch-2.x-EE4C2C?logo=pytorch&logoColor=white)
 ![Transformers](https://img.shields.io/badge/🤗%20Transformers-5.0-FFD21E)
 ![Streamlit](https://img.shields.io/badge/Streamlit-1.53-FF4B4B?logo=streamlit&logoColor=white)
-![CUDA](https://img.shields.io/badge/CUDA-optional-76B900?logo=nvidia&logoColor=white)
+![CUDA](https://img.shields.io/badge/CUDA-supported-76B900?logo=nvidia&logoColor=white)
 ![Test Accuracy](https://img.shields.io/badge/Test%20Accuracy-98.45%25-brightgreen)
 
-This project fine-tunes a pretrained **Vision Transformer (`google/vit-base-patch16-224`)** on the **CIFAR-10** dataset and serves it in two ways:
+This project **fine-tunes** the pre-trained **Vision Transformer `google/vit-base-patch16-224` from Hugging Face** on the **CIFAR-10** dataset. The ViT architecture is not designed from scratch. The model's original 1000-class head is replaced with a new 10-class head, and the whole network is fine-tuned for 1 epoch. It reaches **98.45% test accuracy** on the 10,000 CIFAR-10 test images.
+
+The fine-tuned model is used in two ways:
 
 - 🖥️ a **command-line tool** for single-image or whole-folder predictions
 - 🌐 a **Streamlit web app** where you upload an image and get the predicted class with a confidence score
@@ -112,7 +114,7 @@ vit-image-classification/
 | Attention heads | 12 |
 | Hidden size / MLP size | 768 / 3072 |
 | Parameters | ~86 M |
-| Pretraining | ImageNet-21k, fine-tuned on ImageNet-1k |
+| Pretraining | ImageNet-21k, fine-tuned on ImageNet-1k (per the Hugging Face model card; not specified in this repo's code) |
 | Output head | Replaced with a 10-class linear layer |
 
 ### Dataset: CIFAR-10
@@ -191,7 +193,7 @@ Test samples: 10000
 ViT model loaded!
 
 Epoch [1/1] 🚀
-Batch 0, Loss: 2.3xxx
+Batch 0, Loss: x.xxxx
 Batch 100, Loss: 0.xxxx
 ...
 Epoch completed ✅ Avg Loss: 0.xxxx
@@ -202,7 +204,9 @@ Test Accuracy: xx.xx%
 Model saved to results/vit-cifar10 🎉
 ```
 
-> ⏱️ One epoch is 1,563 batches of 32 images at 224×224. A modern GPU finishes it in minutes; on CPU it can take hours.
+> ⏱️ One epoch is 1,563 batches of 32 images at 224×224. A GPU is much faster than CPU here. Evaluating the 10,000 test images alone took about 15 minutes on CPU.
+>
+> ⚠️ **GPU training needs the CUDA build of PyTorch.** The code uses CUDA automatically when `torch.cuda.is_available()` is `True`, but a CPU-only PyTorch install (e.g. `2.x+cpu`) silently trains on CPU. Check the first line of output: it should say `Using device: cuda`.
 
 ---
 
@@ -222,14 +226,18 @@ python predict.py predict_image/
 
 ### Example output
 
-```
-Using device: cuda
-Model loaded successfully!
+Actual output of `python predict.py predict_image/` with the saved model:
 
-Image: predict_image/cat.jpg
-Predicted class: cat
-Confidence: 98.84%
-```
+| Image | Predicted class | Confidence |
+| :--- | :--- | :---: |
+| `airplane.jpg` | airplane | 99.26% |
+| `blue_bird.jpg` | bird | 92.45% |
+| `Cat-on-couch.jpg` | cat | 99.03% |
+| `cat.jpg` | **dog** ❌ | 98.84% |
+| `red_car.jpg` | automobile | 98.19% |
+| `red_horse.jpg` | horse | 99.84% |
+
+5 of the 6 sample images are correct. `cat.jpg` is predicted as `dog` with 98.84% confidence, a reminder that high confidence does not guarantee a correct answer. Cat is also the weakest class on the test set (96.6%).
 
 Any image size works: it is converted to RGB and resized to 224×224 before inference. Keep in mind that the model only knows the 10 CIFAR-10 classes, so a photo of anything else will still be mapped to the closest of those 10.
 
@@ -247,7 +255,7 @@ Then open **http://localhost:8501** in your browser.
 2. The app shows a preview of the image.
 3. You get the **predicted class** and the **confidence score**.
 
-The model is loaded once and cached, so predictions after the first one are fast.
+The model is loaded once with `@st.cache_resource`, so it is not reloaded from disk on every interaction.
 
 ### Understanding the confidence score
 
@@ -284,11 +292,15 @@ All hyperparameters live at the top of `main()` in [`train.py`](train.py):
 | Parameter | Value | Notes |
 | :--- | :--- | :--- |
 | `BATCH_SIZE` | 32 | Lower it if you run out of GPU memory |
-| `EPOCHS` | 1 | Increase for higher accuracy |
+| `EPOCHS` | 1 | The saved checkpoint confirms 1 epoch (1,563 optimizer steps) |
 | `LEARNING_RATE` | 2e-5 | Small learning rate, typical for fine-tuning |
-| Optimizer | AdamW | |
+| Optimizer | AdamW, weight decay 0.01 | PyTorch defaults for betas (0.9, 0.999) and weight decay |
+| Scheduler | none | Constant learning rate |
 | Loss | CrossEntropyLoss | |
-| Input transform | `Resize(224, 224)` + `ToTensor()` | The same transform is used in `predict.py` and `app.py` |
+| Input transform | `Resize(224, 224)` + `ToTensor()` | 32×32 → 224×224, pixel values 0–1. The same transform is used in `predict.py` and `app.py`. |
+| Data augmentation | none | |
+| Mean/std normalisation | none | |
+| Mixed precision | none | Full FP32 |
 | DataLoader | `num_workers=4`, `pin_memory=True` | |
 
 ---
